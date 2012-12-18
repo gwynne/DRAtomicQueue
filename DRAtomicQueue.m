@@ -50,7 +50,7 @@
 #if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000 || (!__IPHONE_OS_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080))
 		_container = [[aDecoder decodeObjectOfClass:[NSArray class] forKey:@"container"] mutableCopy];
 #else
-		_container = [[aDecoder decodeObjectForKey:@"container"];
+		_container = [[aDecoder decodeObjectForKey:@"container"] mutableCopy];
 #endif
 	}
 	return self;
