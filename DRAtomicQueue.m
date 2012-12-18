@@ -8,6 +8,13 @@
 
 #import "DRAtomicQueue.h"
 
+// Shut up the compiler warning on 10.7/iOS 5 SDK
+#if !((__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000 || (!__IPHONE_OS_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)))
+@interface NSCoder (SecureCodingMethodDeclaration)
+- (id)decodeObjectOfClass:(Class)c forKey:(NSString *)k;
+@end
+#endif
+
 @implementation DRAtomicQueue
 {
 	NSMutableArray *_container;
@@ -47,11 +54,10 @@
 {
 	if ((self = [self init]))
 	{
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000 || (!__IPHONE_OS_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080))
-		_container = [[aDecoder decodeObjectOfClass:[NSArray class] forKey:@"container"] mutableCopy];
-#else
-		_container = [[aDecoder decodeObjectForKey:@"container"] mutableCopy];
-#endif
+		if ([aDecoder respondsToSelector:@selector(decodeObjectOfClass:forKey:)])
+			_container = [[aDecoder decodeObjectOfClass:[NSArray class] forKey:@"container"] mutableCopy];
+		else
+			_container = [[aDecoder decodeObjectForKey:@"container"] mutableCopy];
 	}
 	return self;
 }
