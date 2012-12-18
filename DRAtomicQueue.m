@@ -51,7 +51,7 @@ static BOOL DRAtomicQueue_NSCoderHasSecureCoding = NO;
 
 - (void)push:(id)object
 {
-	dispatch_async(_queueQueue, ^ { [_container addObject:object]; });
+	dispatch_sync(_queueQueue, ^ { [_container addObject:object]; });
 }
 
 - (id)pop
@@ -60,6 +60,11 @@ static BOOL DRAtomicQueue_NSCoderHasSecureCoding = NO;
 	
 	dispatch_sync(_queueQueue, ^ { if (_container.count) { result = _container[0]; [_container removeObjectAtIndex:0]; } });
 	return result;
+}
+
+- (void)unPop:(id)object
+{
+	dispatch_sync(_queueQueue, ^ { [_container insertObject:object atIndex:0]; });
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder

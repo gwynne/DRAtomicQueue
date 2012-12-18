@@ -34,5 +34,6 @@
 
 - (void)push:(id)object;
 - (id)pop;
+- (void)unPop:(id)object;
 
 @end
