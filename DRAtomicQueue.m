@@ -39,7 +39,7 @@
 {
 	__block id result = nil;
 	
-	dispatch_sync(_queueQueue, ^ { result = _container[0]; [_container removeObjectAtIndex:0]; });
+	dispatch_sync(_queueQueue, ^ { if (_container.count) { result = _container[0]; [_container removeObjectAtIndex:0]; } });
 	return result;
 }
 
