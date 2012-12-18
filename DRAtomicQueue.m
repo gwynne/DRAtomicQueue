@@ -7,6 +7,7 @@
 //
 
 #import "DRAtomicQueue.h"
+#import <objc/runtime.h>
 
 // Shut up the compiler warning on 10.7/iOS 5 SDK
 #if !((__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000 || (!__IPHONE_OS_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)))
@@ -15,10 +16,21 @@
 @end
 #endif
 
+static BOOL DRAtomicQueue_NSCoderHasSecureCoding = NO;
+
 @implementation DRAtomicQueue
 {
 	NSMutableArray *_container;
 	dispatch_queue_t _queueQueue;
+}
+
++ (void)initialize
+{
+	if ([DRAtomicQueue class] == [self class])
+	{
+		DRAtomicQueue_NSCoderHasSecureCoding = [NSCoder instancesRespondToSelector:@selector(decodeObjectOfClass:forKey:)] &&
+												objc_getProtocol("NSSecureCoding") != NULL;
+	}
 }
 
 // Don't need #ifdef for this, the method is harmless on 10.7
@@ -54,7 +66,7 @@
 {
 	if ((self = [self init]))
 	{
-		if ([aDecoder respondsToSelector:@selector(decodeObjectOfClass:forKey:)])
+		if (DRAtomicQueue_NSCoderHasSecureCoding)
 			_container = [[aDecoder decodeObjectOfClass:[NSArray class] forKey:@"container"] mutableCopy];
 		else
 			_container = [[aDecoder decodeObjectForKey:@"container"] mutableCopy];
