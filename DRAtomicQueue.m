@@ -58,7 +58,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-	dispatch_sync(_queueQueue, ^ { [aCoder encodeObject:_container.copy forKey:@"container"]; });
+	dispatch_sync(_queueQueue, ^ { [aCoder encodeObject:_container forKey:@"container"]; });
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone
