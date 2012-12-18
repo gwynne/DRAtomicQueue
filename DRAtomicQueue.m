@@ -58,7 +58,10 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-	dispatch_sync(_queueQueue, ^ { [aCoder encodeObject:_container forKey:@"container"]; });
+	__block NSArray *containerCopy = nil;
+	
+	dispatch_sync(_queueQueue, ^ { containerCopy = _container.copy; });
+	[aCoder encodeObject:containerCopy forKey:@"container"];
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone
