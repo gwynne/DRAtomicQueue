@@ -10,7 +10,7 @@
 #import <objc/runtime.h>
 
 // Shut up the compiler warning on 10.7/iOS 5 SDK
-#if !((__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000 || (!__IPHONE_OS_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)))
+#if !((!defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080) || (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000))
 @interface NSCoder (SecureCodingMethodDeclaration)
 - (id)decodeObjectOfClass:(Class)c forKey:(NSString *)k;
 @end

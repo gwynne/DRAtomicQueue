@@ -25,7 +25,7 @@
 //	exception if given a non-keyed coder.
 
 @interface DRAtomicQueue : NSObject <NSCopying,
-#if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000 || (!__IPHONE_OS_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080))
+#if ((!defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080) || __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000)
 									 NSSecureCoding
 #else
 									 NSCoding
